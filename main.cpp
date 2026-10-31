@@ -7,72 +7,69 @@
 #include "SmartThermostat.hpp"
 
 void DemonstrateInheritance() {
-    std::cout << "\n========== ЛР 4. Демонстрация наследования ==========\n" << std::endl;
+    std::cout << "\n========== Р›Р  4. Р”РµРјРѕРЅСЃС‚СЂР°С†РёСЏ РЅР°СЃР»РµРґРѕРІР°РЅРёСЏ ==========\n" << std::endl;
 
-    // Создаем "комнату" как shared_ptr, чтобы показать разницу
-    auto roomPtr = std::make_shared<std::string>("Гостиная");
+    // РЎРѕР·РґР°РµРј "РєРѕРјРЅР°С‚Сѓ" РєР°Рє shared_ptr, С‡С‚РѕР±С‹ РїРѕРєР°Р·Р°С‚СЊ СЂР°Р·РЅРёС†Сѓ
+    auto roomPtr = std::make_shared<std::string>("Р“РѕСЃС‚РёРЅР°СЏ");
 
-    std::cout << "--- 1. Порядок вызова конструкторов ---" << std::endl;
-    SmartLamp lamp("Умная лампа", 10, roomPtr, 80);
-    SmartThermostat thermostat("Термостат 1", 15, roomPtr, 22.5);
+    std::cout << "--- 1. РџРѕСЂСЏРґРѕРє РІС‹Р·РѕРІР° РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂРѕРІ ---" << std::endl;
+    SmartLamp lamp("РЈРјРЅР°СЏ Р»Р°РјРїР°", 10, roomPtr, 80);
+    SmartThermostat thermostat("РўРµСЂРјРѕСЃС‚Р°С‚ 1", 15, roomPtr, 22.5);
 
-    std::cout << "\n--- 2. Виртуальные методы и виртуальный деструктор ---" << std::endl;
+    std::cout << "\n--- 2. Р’РёСЂС‚СѓР°Р»СЊРЅС‹Рµ РјРµС‚РѕРґС‹ Рё РІРёСЂС‚СѓР°Р»СЊРЅС‹Р№ РґРµСЃС‚СЂСѓРєС‚РѕСЂ ---" << std::endl;
     {
-        std::unique_ptr<BaseDevice> ptr = std::make_unique<SmartLamp>("Лампа на балконе", 5, roomPtr, 50);
-        std::cout << "Описание через указатель: " << ptr->Describe() << std::endl;
+        std::unique_ptr<BaseDevice> ptr = std::make_unique<SmartLamp>("Р›Р°РјРїР° РЅР° Р±Р°Р»РєРѕРЅРµ", 5, roomPtr, 50);
+        std::cout << "РћРїРёСЃР°РЅРёРµ С‡РµСЂРµР· СѓРєР°Р·Р°С‚РµР»СЊ: " << ptr->Describe() << std::endl;
         ptr.reset();
-        std::cout << "Указатель сброшен." << std::endl;
+        std::cout << "РЈРєР°Р·Р°С‚РµР»СЊ СЃР±СЂРѕС€РµРЅ." << std::endl;
     }
 
-    std::cout << "\n--- 3. Поверхностное и глубокое копирование ---" << std::endl;
+    std::cout << "\n--- 3. РџРѕРІРµСЂС…РЅРѕСЃС‚РЅРѕРµ Рё РіР»СѓР±РѕРєРѕРµ РєРѕРїРёСЂРѕРІР°РЅРёРµ ---" << std::endl;
 
-    // --- ПОВЕРХНОСТНОЕ КОПИРОВАНИЕ (Shallow Copy) ---
-    // Допустим, мы не написали конструктор копирования, и компилятор сделал его сам.
-    // Но в нашем классе BaseDevice ЕСТЬ конструктор копирования (глубокий).
-    // Чтобы показать поверхностное, просто скопируем shared_ptr вручную:
-    std::cout << "-> Поверхностное копирование (делим один shared_ptr):" << std::endl;
-    auto shallowRoom = roomPtr; // Копируем указатель, а не строку
-    SmartLamp shallowCopy("Лампа (поверхностная копия)", 10, shallowRoom, 60);
+    // --- РџРћР’Р•Р РҐРќРћРЎРўРќРћР• РљРћРџРР РћР’РђРќРР• (Shallow Copy) ---
+    std::cout << "-> РџРѕРІРµСЂС…РЅРѕСЃС‚РЅРѕРµ РєРѕРїРёСЂРѕРІР°РЅРёРµ (РґРµР»РёРј РѕРґРёРЅ shared_ptr):" << std::endl;
+    auto shallowRoom = roomPtr; // РљРѕРїРёСЂСѓРµРј СѓРєР°Р·Р°С‚РµР»СЊ, Р° РЅРµ СЃС‚СЂРѕРєСѓ
+    SmartLamp shallowCopy("Р›Р°РјРїР° (РїРѕРІРµСЂС…РЅРѕСЃС‚РЅР°СЏ РєРѕРїРёСЏ)", 10, shallowRoom, 60);
 
-    std::cout << "Оригинал: " << lamp.Describe() << std::endl;
-    std::cout << "Копия:    " << shallowCopy.Describe() << std::endl;
+    std::cout << "РћСЂРёРіРёРЅР°Р»: " << lamp.Describe() << std::endl;
+    std::cout << "РљРѕРїРёСЏ:    " << shallowCopy.Describe() << std::endl;
 
-    // Меняем комнату у копии (через указатель)
-    shallowCopy.RenameRoom("Спальня");
+    // РњРµРЅСЏРµРј РєРѕРјРЅР°С‚Сѓ Сѓ РєРѕРїРёРё (С‡РµСЂРµР· СѓРєР°Р·Р°С‚РµР»СЊ)
+    shallowCopy.RenameRoom("РЎРїР°Р»СЊРЅСЏ");
 
-    std::cout << "После переименования комнаты у копии:" << std::endl;
-    std::cout << "Оригинал: " << lamp.Describe() << "  <-- ИЗМЕНИЛСЯ!" << std::endl;
-    std::cout << "Копия:    " << shallowCopy.Describe() << std::endl;
+    std::cout << "РџРѕСЃР»Рµ РїРµСЂРµРёРјРµРЅРѕРІР°РЅРёСЏ РєРѕРјРЅР°С‚С‹ Сѓ РєРѕРїРёРё:" << std::endl;
+    std::cout << "РћСЂРёРіРёРЅР°Р»: " << lamp.Describe() << "  <-- РР—РњР•РќРР›РЎРЇ!" << std::endl;
+    std::cout << "РљРѕРїРёСЏ:    " << shallowCopy.Describe() << std::endl;
 
-    // --- ГЛУБОКОЕ КОПИРОВАНИЕ (Deep Copy) ---
-    std::cout << "\n-> Глубокое копирование (через Clone()):" << std::endl;
-    auto deepCopy = lamp.Clone(); // Вызывает наш конструктор копирования (создает новую строку)
+    // --- Р“Р›РЈР‘РћРљРћР• РљРћРџРР РћР’РђРќРР• (Deep Copy) ---
+    std::cout << "\n-> Р“Р»СѓР±РѕРєРѕРµ РєРѕРїРёСЂРѕРІР°РЅРёРµ (С‡РµСЂРµР· Clone()):" << std::endl;
+    auto deepCopy = lamp.Clone(); // Р’С‹Р·С‹РІР°РµС‚ РЅР°С€ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РєРѕРїРёСЂРѕРІР°РЅРёСЏ (СЃРѕР·РґР°РµС‚ РЅРѕРІСѓСЋ СЃС‚СЂРѕРєСѓ)
 
-    std::cout << "Оригинал: " << lamp.Describe() << std::endl;
-    std::cout << "Копия:    " << deepCopy->Describe() << std::endl;
+    std::cout << "РћСЂРёРіРёРЅР°Р»: " << lamp.Describe() << std::endl;
+    std::cout << "РљРѕРїРёСЏ:    " << deepCopy->Describe() << std::endl;
 
-    // Меняем комнату у глубокой копии
-    deepCopy->RenameRoom("Кухня");
+    // РњРµРЅСЏРµРј РєРѕРјРЅР°С‚Сѓ Сѓ РіР»СѓР±РѕРєРѕР№ РєРѕРїРёРё
+    deepCopy->RenameRoom("РљСѓС…РЅСЏ");
 
-    std::cout << "После переименования комнаты у глубокой копии:" << std::endl;
-    std::cout << "Оригинал: " << lamp.Describe() << "  <-- НЕ ИЗМЕНИЛСЯ!" << std::endl;
-    std::cout << "Копия:    " << deepCopy->Describe() << std::endl;
+    std::cout << "РџРѕСЃР»Рµ РїРµСЂРµРёРјРµРЅРѕРІР°РЅРёСЏ РєРѕРјРЅР°С‚С‹ Сѓ РіР»СѓР±РѕРєРѕР№ РєРѕРїРёРё:" << std::endl;
+    std::cout << "РћСЂРёРіРёРЅР°Р»: " << lamp.Describe() << "  <-- РќР• РР—РњР•РќРР›РЎРЇ!" << std::endl;
+    std::cout << "РљРѕРїРёСЏ:    " << deepCopy->Describe() << std::endl;
 
-    std::cout << "\n--- 4. Присваивание и this ---" << std::endl;
-    SmartLamp lamp1("Лампа 1", 10, roomPtr);
-    SmartLamp lamp2("Лампа 2", 12, roomPtr);
+    std::cout << "\n--- 4. РџСЂРёСЃРІР°РёРІР°РЅРёРµ Рё this ---" << std::endl;
+    SmartLamp lamp1("Р›Р°РјРїР° 1", 10, roomPtr);
+    SmartLamp lamp2("Р›Р°РјРїР° 2", 12, roomPtr);
     lamp1 = lamp2;
-    std::cout << "Всего создано устройств: " << BaseDevice::NextId() - 1 << std::endl;
+    std::cout << "Р’СЃРµРіРѕ СЃРѕР·РґР°РЅРѕ СѓСЃС‚СЂРѕР№СЃС‚РІ: " << BaseDevice::NextId() - 1 << std::endl;
 
-    std::cout << "\n--- 5. Работа со строками ---" << std::endl;
+    std::cout << "\n--- 5. Р Р°Р±РѕС‚Р° СЃРѕ СЃС‚СЂРѕРєР°РјРё ---" << std::endl;
     std::string text = lamp1.Describe();
-    std::cout << "Полное описание: " << text << std::endl;
-    size_t pos = text.find("Лампа");
+    std::cout << "РџРѕР»РЅРѕРµ РѕРїРёСЃР°РЅРёРµ: " << text << std::endl;
+    size_t pos = text.find("Р›Р°РјРїР°");
     if (pos != std::string::npos) {
-        std::cout << "Найдена подстрока: '" << text.substr(pos, 5) << "'" << std::endl;
+        std::cout << "РќР°Р№РґРµРЅР° РїРѕРґСЃС‚СЂРѕРєР°: '" << text.substr(pos, 5) << "'" << std::endl;
     }
 
-    std::cout << "\n--- Конец демонстрации ---\n" << std::endl;
+    std::cout << "\n--- РљРѕРЅРµС† РґРµРјРѕРЅСЃС‚СЂР°С†РёРё ---\n" << std::endl;
 }
 
 int main() {
